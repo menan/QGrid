@@ -94,42 +94,44 @@ public struct QGrid<Data, Content>: View
   
   /// Declares the content and behavior of this view.
   public var body : some View {
-    if scrollable {
-      GeometryReader { geometry in
-        ScrollView(showsIndicators: false) {
-          VStack(spacing: self.vSpacing) {
-            ForEach((0..<self.rows).map { QGridIndex(id: $0) }) { row in
-              self.rowAtIndex(row.id * self.cols,
-                              geometry: geometry)
-            }
-            // Handle last row
-            if (self.data.count % self.cols > 0) {
-              self.rowAtIndex(self.cols * self.rows,
-                              geometry: geometry,
-                              isLastRow: true)
-            }
-          }
-        }
-        .padding(.horizontal, self.hPadding)
-        .padding(.vertical, self.vPadding)
-      }
-    }
-    else {
-      GeometryReader { geometry in
-          VStack(spacing: self.vSpacing) {
-            ForEach((0..<self.rows).map { QGridIndex(id: $0) }) { row in
-              self.rowAtIndex(row.id * self.cols,
-                              geometry: geometry)
-            }
-            // Handle last row
-            if (self.data.count % self.cols > 0) {
-              self.rowAtIndex(self.cols * self.rows,
-                              geometry: geometry,
-                              isLastRow: true)
+    Group {
+      if scrollable {
+        GeometryReader { geometry in
+          ScrollView(showsIndicators: false) {
+            VStack(spacing: self.vSpacing) {
+              ForEach((0..<self.rows).map { QGridIndex(id: $0) }) { row in
+                self.rowAtIndex(row.id * self.cols,
+                                geometry: geometry)
+              }
+              // Handle last row
+              if (self.data.count % self.cols > 0) {
+                self.rowAtIndex(self.cols * self.rows,
+                                geometry: geometry,
+                                isLastRow: true)
+              }
             }
           }
           .padding(.horizontal, self.hPadding)
           .padding(.vertical, self.vPadding)
+        }
+      }
+      else {
+        GeometryReader { geometry in
+            VStack(spacing: self.vSpacing) {
+              ForEach((0..<self.rows).map { QGridIndex(id: $0) }) { row in
+                self.rowAtIndex(row.id * self.cols,
+                                geometry: geometry)
+              }
+              // Handle last row
+              if (self.data.count % self.cols > 0) {
+                self.rowAtIndex(self.cols * self.rows,
+                                geometry: geometry,
+                                isLastRow: true)
+              }
+            }
+            .padding(.horizontal, self.hPadding)
+            .padding(.vertical, self.vPadding)
+        }
       }
     }
   }
